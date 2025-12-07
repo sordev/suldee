@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+
+{% block title %}Platformer — Suldee{% endblock %}
+
+{% block content %}
+  <section>
+    <h2>Platformer (Python in the browser)</h2>
+    <p>Use arrow keys to move, space to jump.</p>
+    <canvas id="game" width="800" height="400" style="border:1px solid #ccc; background: #cfe8ff; display:block; margin:12px 0;"></canvas>
+
+ 
+  </section>
+
+  <script src="https://cdn.jsdelivr.net/npm/brython@3.10.5/brython.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/brython@3.10.5/brython_stdlib.js"></script>
+  <script type="text/python">
+from browser import document, window, html, timer
+
+canvas = document['game']
+ctx = canvas.getContext('2d')
+
+W, H = 800, 400
+
+player = {'x':50, 'y':H-70, 'w':30, 'h':50, 'vx':0, 'vy':0, 'on_ground':False}
+gravity = 0.9
+keys = {'left':False, 'right':False, 'up':False}
+
+platforms = [
+    {'x':0, 'y':H-20, 'w':W, 'h':20},
+    {'x':120, 'y':300, 'w':120, 'h':12},
+    {'x':300, 'y':230, 'w':120, 'h':12},
+    {'x':520, 'y':170, 'w':150, 'h':12},
+]
+
+def keydown(ev):
+    k = ev.key
+    if k in ('ArrowLeft','a'):
+        keys['left'] = True
+    if k in ('ArrowRight','d'):
+        keys['right'] = True
+    if k in (' ','Spacebar','Space'):
+        keys['up'] = True
+
+def keyup(ev):
+    k = ev.key
+    if k in ('ArrowLeft','a'):
+        keys['left'] = False
+    if k in ('ArrowRight','d'):
+        keys['right'] = False
+    if k in (' ','Spacebar','Space'):
+        keys['up'] = False
+
+document.bind('keydown', keydown)
+document.bind('keyup', keyup)
+
+def coll(a, b):
+    return not (a['x']+a['w'] < b['x'] or a['x'] > b['x']+b['w'] or a['y']+a['h'] < b['y'] or a['y'] > b['y']+b['h'])
+
+def update():
+    # horizontal
+    if keys['left']:
+        player['vx'] = -4
+    elif keys['right']:
+        player['vx'] = 4
+    else:
+        player['vx'] *= 0.8
+
+    player['x'] += player['vx']
+
+    # gravity
+    player['vy'] += gravity
+    player['y'] += player['vy']
+
+    # simple collisions
+    player['on_ground'] = False
+    for p in platforms:
+        if coll(player, p):
+            # coming from above
+            if player['vy'] > 0 and player['y'] + player['h'] - player['vy'] <= p['y']:
+                player['y'] = p['y'] - player['h']
+                player['vy'] = 0
+                player['on_ground'] = True
+
+    # jump
+    if keys['up'] and player['on_ground']:
+        player['vy'] = -14
+        player['on_ground'] = False
+
+    # bounds
+    if player['x'] < 0: player['x'] = 0
+    if player['x'] + player['w'] > W: player['x'] = W - player['w']
+    if player['y'] > H: # fell
+        player['x'], player['y'] = 50, H-70
+        player['vx'] = player['vy'] = 0
+
+def draw():
+    ctx.clearRect(0,0,W,H)
+    # draw platforms
+    ctx.fillStyle = '#6b8e23'
+    for p in platforms:
+        ctx.fillRect(p['x'], p['y'], p['w'], p['h'])
+
+    # player
+    ctx.fillStyle = '#ff5722'
+    ctx.fillRect(player['x'], player['y'], player['w'], player['h'])
+
+    # HUD
+    ctx.fillStyle = '#000'
+    ctx.fillText('Use arrows or A/D to move — Space to jump', 10, 20)
+
+def tick():
+    update()
+    draw()
+
+timer.set_interval(tick, 16)
+
+  </script>
+  <script>
+    // start brython after page loads
+    window.addEventListener('load', function(){ brython(); });
+  </script>
+
+{% endblock %}
