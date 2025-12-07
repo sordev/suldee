@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Suldee's Games{% endblock %}
+
+{% block content %}
+  <section>
+    <h2>Suldee's Games</h2>
+    <p>Here are a few example games with short descriptions.</p>
+    <ul class="games-list">
+      {% for g in games %}
+        <li class="game-item">
+          <h3>{{ g.title }}</h3>
+          <p>{{ g.desc }}</p>
+          <p><a href="{{ g.link }}">Play / More</a></p>
+        </li>
+      {% endfor %}
+    </ul>
+  </section>
+{% endblock %}

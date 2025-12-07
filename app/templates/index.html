@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Home — Suldee{% endblock %}
+
+{% block content %}
+  <section>
+    <h2>Hello, {{ name }}!</h2>
+    <p>Welcome to Suldee's little corner. This is the home page.</p>
+    <p>Check out some fun games on the <a href="{{ url_for('games') }}">games page</a>.</p>
+  </section>
+
+  <section>
+    <h3>About</h3>
+    <p>Examples below show a few tiny games Suldee might enjoy.</p>
+  </section>
+{% endblock %}
