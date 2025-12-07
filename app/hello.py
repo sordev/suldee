@@ -56,5 +56,10 @@ def games():
             "desc": "Relaxing match-and-grow puzzles to build a garden.",
             "link": "#",
         },
+        {
+            "title": "Platform Panic",
+            "desc": "action-packed platformer with tricky jumps and enemies.",
+            "link": "#",
+        }
     ]
     return render_template("games.html", games=games)
