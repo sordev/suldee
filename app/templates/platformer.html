@@ -4,10 +4,8 @@
 
 {% block content %}
   <section>
-    <h2>Platformer (Python in the browser)</h2>
       <section>
-        <h2>Platformer (Python in the browser)</h2>
-        <p>Use arrow keys or A/D to move, space to jump. Switch levels and toggle fullscreen.</p>
+        <p>Use arrow keys, WASD, or A/D to move, space or W to jump. Switch levels and toggle fullscreen.</p>
         <div id="game-wrap" style="display:block; margin:12px 0;">
           <canvas id="game" width="800" height="400" style="border:1px solid #ccc; background: #cfe8ff; display:block;"></canvas>
           <div style="margin-top:8px;">
@@ -112,20 +110,20 @@
 
     def keydown(ev):
         k = ev.key
-        if k in ('ArrowLeft','a'):
+        if k in ('ArrowLeft','a','A'):
             keys['left'] = True
-        if k in ('ArrowRight','d'):
+        if k in ('ArrowRight','d','D'):
             keys['right'] = True
-        if k in (' ','Spacebar','Space'):
+        if k in (' ','Spacebar','Space','w','W'):
             keys['up'] = True
 
     def keyup(ev):
         k = ev.key
-        if k in ('ArrowLeft','a'):
+        if k in ('ArrowLeft','a','A'):
             keys['left'] = False
-        if k in ('ArrowRight','d'):
+        if k in ('ArrowRight','d','D'):
             keys['right'] = False
-        if k in (' ','Spacebar','Space'):
+        if k in (' ','Spacebar','Space','w','W'):
             keys['up'] = False
 
     document.bind('keydown', keydown)
@@ -224,7 +222,7 @@
 
         # HUD
         ctx.fillStyle = '#000'
-        ctx.fillText(f'Level: {level_index+1}/{len(levels)} — Use arrows or A/D, Space to jump', 10, 18)
+        ctx.fillText(f'Level: {level_index+1}/{len(levels)} — Use arrows, WASD, or A/D, Space/W to jump', 10, 18)
 
     def tick():
         update()
