@@ -21,9 +21,9 @@ jobs:
       - name: Log in to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_EB7837A1237A4F3CB84C37FFDA664B7E }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_9A4ED13CBD3C478CAA68B94FE5AD8842 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_1E2E1C3FC5BA440A8B794A81532CDADD }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID || secrets.AZUREAPPSERVICE_CLIENTID_EB7837A1237A4F3CB84C37FFDA664B7E }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID || secrets.AZUREAPPSERVICE_TENANTID_9A4ED13CBD3C478CAA68B94FE5AD8842 }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID || secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_1E2E1C3FC5BA440A8B794A81532CDADD }}
 
       - name: Build and push container image via ACR
         run: |
