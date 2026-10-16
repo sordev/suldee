@@ -29,6 +29,7 @@ jobs:
         run: |
           az acr build \
             --registry cacf50a6c37facr \
+            --resource-group rg-big2-prod \
             --image suldee:${{ github.sha }} \
             --image suldee:latest \
             .
